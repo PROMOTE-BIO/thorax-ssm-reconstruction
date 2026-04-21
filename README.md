@@ -88,9 +88,12 @@ The input file is a row-based CSV file containing subject demographics and anato
 The expected format is as follows:
 
 |Sex     0
+
 |Age     33
-Weight  82.8
-Height  1.65
+
+|Weight  82.8
+
+|Height  1.65
 
 C7      15.3964   -236.004   -299.06
 T8      33.4965   -250.484   -476.908
