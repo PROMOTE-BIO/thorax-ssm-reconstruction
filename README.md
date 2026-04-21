@@ -50,10 +50,10 @@ pip install -r requirements-lock.txt
 
 ### 1. Quick Start
 Clone the repository:
-
+```
 git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
-
 cd thorax-ssm-reconstruction
+```
 
 Install dependencies:
 ```
