@@ -66,14 +66,12 @@ Run the reconstruction pipeline:
 python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-based
 ```
 
-
 ### 📥 Input
 
---filename: name of the input CSV file (without extension), e.g. example_subject.csv. It must be saved in the InputData folder.
-
---method: reconstruction method
-   - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
-   - SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
+- `--filename`: name of the input CSV file (without extension), e.g. example_subject.csv. It must be saved in the InputData folder.
+- `--method`: reconstruction method
+      - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
+      - SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
 
 ### Optional arguments
 
@@ -81,9 +79,30 @@ python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-b
 - `--Plot`: set to `True` to visualize reconstruction  
 - `--compare`: name of `.stl` file (without extension) for comparison
 
+### 📄 CSV Input data format
+
+This section describes the format of the input file used by `--filename`, not the function arguments.
+
+An example file is provided in:
+
+`inputdata/example_subject.csv`
+
+Expected format:
+
+|Age   , Subject age (years) ,  ,  |
+|Sex   , 0 = female, 1 = male,  ,  |
+|Height, height (m)          ,  ,  |
+|Weight, weight (kg)         ,  ,  |
+|C7    , x                   , y, z|
+|T8    , x                   , y, z|
+|XP    , x                   , y, z|
+|JN    , x                   , y, z|
+|R10   , x                   , y, z|
+
 ### 📥 Output
 
-Reconstructed thorax surface saved as .stl in the Results/ folder
+- Reconstructed thorax surface saved as `.stl` in the `Results/` folder  
+- (Optional) diagnostic outputs depending on settings (e.g. error metrics, optimization logs)
 
 ### Example
 
