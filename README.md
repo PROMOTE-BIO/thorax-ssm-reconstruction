@@ -84,22 +84,25 @@ python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-b
 ### 📄 CSV Input data format
 
 This section describes the format of the input file used by `--filename`, not the function arguments.
+The input file is a row-based CSV file containing subject demographics and anatomical landmark coordinates.
+The expected format is as follows:
+
+Sex     0
+Age     33
+Weight  82.8
+Height  1.65
+
+C7      15.3964   -236.004   -299.06
+T8      33.4965   -250.484   -476.908
+JN      16.1204   -86.1349   -362.947
+XP      24.4464   -31.4726   -485.542
+R10     208.344   -115.819   -601.229
+
 
 An example file is provided in:
 
 `inputdata/example_subject.csv`
 
-Expected format:
-
-|Age   , Subject age (years) ,  ,  |
-|Sex   , 0 = female, 1 = male,  ,  |
-|Height, height (m)          ,  ,  |
-|Weight, weight (kg)         ,  ,  |
-|C7    , x                   , y, z|
-|T8    , x                   , y, z|
-|XP    , x                   , y, z|
-|JN    , x                   , y, z|
-|R10   , x                   , y, z|
 
 ### 📥 Output
 
