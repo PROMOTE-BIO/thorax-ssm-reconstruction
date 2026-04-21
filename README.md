@@ -108,22 +108,6 @@ An example file is provided in:
 - Reconstructed thorax surface saved as `.stl` in the `Results/` folder  
 - (Optional) diagnostic outputs depending on settings (e.g. error metrics, optimization logs)
 
-### Example
-
-The reconstruction requires:
-
-1. Skin landmarks  
-   - 3D coordinates of predefined anatomical landmarks
-
-2. Subject-specific variables  
-   - Age  
-   - Sex  
-   - Height  
-   - Weight  
-
-Input format examples are provided in the `inputdata/` directory.
-
-The statistical shape models and regression models are pre-trained and provided for direct use.
 
 ## ⚠️ Notes and Limitations
 - Reconstruction accuracy depends on the quality and consistency of the input landmarks
