@@ -65,6 +65,7 @@ Run the reconstruction pipeline:
 python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM-SL-based
 ```
 
+
 📥 Input
 
 --filename: name of the input CSV file (without extension), e.g. example_subject.csv
@@ -80,6 +81,7 @@ Optional arguments:
 --Plot: True to visualize the reconstruction at the end
 
 --compare: name of .stl file (without extension) for comparison (if applicable)
+
 
 📥 Output
 
