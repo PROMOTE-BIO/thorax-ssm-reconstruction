@@ -45,9 +45,9 @@ pip install -r requirements-lock.txt
 - `requirements-lock.txt`: exact environment used for development and testing  
 ```
 
-### 🚀 Usage
+## 🚀 Usage
 
-# Quick Start
+### Quick Start
 Clone the repository:
 ```bash
 git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
@@ -59,7 +59,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-# Running the reconstruction
+### Running the reconstruction
 Run the reconstruction pipeline:
 ```
 python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM-SL-based
@@ -76,7 +76,9 @@ python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM
 Optional arguments:
 
 --PCs: number of principal components (default: 8)
+
 --Plot: True to visualize the reconstruction at the end
+
 --compare: name of .stl file (without extension) for comparison (if applicable)
 
 📥 Output
