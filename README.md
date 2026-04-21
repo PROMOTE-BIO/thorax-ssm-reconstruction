@@ -59,23 +59,22 @@ pip install -r requirements.txt
 ### Running the reconstruction
 Run the reconstruction pipeline:
 ```
-python run_reconstruction.py --filename data/example_subject --method SSM-SL-based
+python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM-SL-based
 ```
 
-Input
+📥 Input
 --filename: name of the input CSV file (without extension), e.g. example_subject.csv
 --method: reconstruction method
-SSM-SL-based (skin landmarks)
-SSM-BL-based (bony landmarks)
+   SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
+   SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
 
 Optional arguments:
+--PCs: number of principal components (default: 8)
+--Plot: True to visualize the reconstruction at the end
+--compare: name of .stl file (without extension) for comparison (if applicable)
 
---PCs: number of principal components (default: 2)
---Plot: True to visualize the reconstruction
---compare: name of .stl file (without extension) for comparison
-Output
+📥 Output
 Reconstructed thorax surface saved as .stl in the Results/ folder
-Optional visualization using open3d
 
 ### Example
 
