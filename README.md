@@ -10,35 +10,40 @@ The method takes as input:
 and outputs a reconstructed 3D thorax surface based on a pre-trained statistical shape model (SSM).
 
 This repository focuses on the **application stage** of the method, enabling researchers to reconstruct thorax geometries without requiring medical imaging data.
-📄 Associated Publication
-This work is associated with the following publication:
 
-[Full citation here]
+📄 Associated Publication
+This repository accompanies the manuscript:
+"Thorax Shape Reconstruction from Limited CT-digitized Palpable Landmarks using Statistical Shape Modeling"
+currently under review.
 
 If you use this code, please cite the above publication.
 ⚠️ Scope of This Repository
 This repository includes:
 - Reconstruction algorithms
-- Pre-trained statistical shape models (if permitted)
-- Pre-trained regression models (if permitted)
+- Pre-trained statistical shape models of the thorax
+- Pre-trained regression models for mapping skin landmarks to bone landmarks
 - Example scripts for running the reconstruction pipeline
 
-This repository does NOT include:
-- Code for statistical shape model (SSM) training
-- Code for regression model training
-- Original CT imaging data
-
-The focus is on enabling the use and reproducibility of the reconstruction methodology.
 ⚙️ Installation
 ### Requirements
-- Python 3.x
-- numpy
-- scipy
-- open3d
-- scikit-learn
+- Python >=3.10, <3.13 (due to `open3d` compatibility)
 
-Install dependencies:
+### Installation
+
+For standard use:
+```
 pip install -r requirements.txt
+```
+For exact reproducibility:
+```
+pip install -r requirements-lock.txt
+```
+
+```md
+- `requirements.txt`: minimal dependencies for running the pipeline  
+- `requirements-lock.txt`: exact environment used for development and testing  
+```
+
 🚀 Usage
 ### Running the reconstruction
 
