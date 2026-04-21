@@ -62,7 +62,7 @@ pip install -r requirements.txt
 ### Running the reconstruction
 Run the reconstruction pipeline:
 ```
-python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM-SL-based
+python SSM-thorax-reconstruction.py --filename inputdata/example_subject --method SSM-SL-based
 ```
 
 
@@ -89,8 +89,6 @@ Reconstructed thorax surface saved as .stl in the Results/ folder
 
 ### Example
 
-python scripts/example_usage.py
-📥 Input Data
 The reconstruction requires:
 
 1. Skin landmarks  
@@ -102,32 +100,19 @@ The reconstruction requires:
    - Height  
    - Weight  
 
-Input format examples are provided in the `data/example/` directory.
-📤 Output
-The pipeline outputs:
-- Reconstructed 3D thorax mesh
-- Estimated bone landmark positions (optional)
+Input format examples are provided in the `inputdata/` directory.
 
-Output files are saved in standard formats (e.g., .ply, .obj).
-🧠 Method Overview
-The reconstruction pipeline consists of:
+The statistical shape models and regression models are pre-trained and provided for direct use.
 
-1. Mapping skin landmarks to bone landmarks using pre-trained regression models
-2. Estimating shape parameters of the statistical shape model
-3. Reconstructing the thorax surface via optimization
-
-The statistical shape model and regression models are pre-trained and provided for direct use.
-⚠️ Notes and Limitations
+## ⚠️ Notes and Limitations
 - Reconstruction accuracy depends on the quality and consistency of the input landmarks
 - The method is designed for sparse input scenarios and may not capture fine anatomical details
 - The current implementation prioritizes reconstruction accuracy over computational efficiency
-🔒 Data Availability
-Due to ethical and data protection constraints, the original CT datasets used to develop the models cannot be shared.
 
-Only derived models and reconstruction tools are provided.
-📜 License
+## 📜 License
 MIT License
-📚 Citation
+
+## 📚 Citation
 If you use this work, please cite:
 
 @article{yourname2026,
