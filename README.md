@@ -65,8 +65,8 @@ python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM
 📥 Input
 --filename: name of the input CSV file (without extension), e.g. example_subject.csv
 --method: reconstruction method
-   SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
-   SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
+   - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
+   - SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
 
 Optional arguments:
 --PCs: number of principal components (default: 8)
