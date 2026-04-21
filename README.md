@@ -50,7 +50,9 @@ pip install -r requirements-lock.txt
 
 ### 1. Quick Start
 Clone the repository:
+
 git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
+
 cd thorax-ssm-reconstruction
 
 Install dependencies:
@@ -73,14 +75,11 @@ python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-b
    - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
    - SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
 
-Optional arguments:
+### Optional arguments
 
---PCs: number of principal components (default: 8)
-
---Plot: True to visualize the reconstruction at the end
-
---compare: name of .stl file (without extension) for comparison (if applicable)
-
+- `--PCs`: number of principal components (default: 8)  
+- `--Plot`: set to `True` to visualize reconstruction  
+- `--compare`: name of `.stl` file (without extension) for comparison
 
 ### 📥 Output
 
