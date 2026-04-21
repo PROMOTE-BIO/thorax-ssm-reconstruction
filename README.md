@@ -76,7 +76,7 @@ python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-b
 
 ### Optional arguments
 
-- `--PCs`: number of principal components (default: 8)  
+- `--PCs`: number of principal components (default: 2)  
 - `--Plot`: set to `True` to visualize reconstruction  
 - `--compare`: name of `.stl` file (without extension) for comparison
 
