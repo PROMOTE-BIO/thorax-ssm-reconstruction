@@ -62,13 +62,13 @@ pip install -r requirements.txt
 ### Running the reconstruction
 Run the reconstruction pipeline:
 ```
-python SSM-thorax-reconstruction.py --filename inputdata/example_subject --method SSM-SL-based
+python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-based
 ```
 
 
 📥 Input
 
---filename: name of the input CSV file (without extension), e.g. example_subject.csv
+--filename: name of the input CSV file (without extension), e.g. example_subject.csv. It must be saved in the InputData folder.
 
 --method: reconstruction method
    - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
