@@ -120,9 +120,9 @@ MIT License
 ## 📚 Citation
 If you use this work, please cite:
 
-@article{thoraxssm2026,
-  title={Thorax Shape Reconstruction from Limited CT-digitized Palpable Landmarks using Statistical Shape Modeling},
-  author={R. Alcobia, J. Folgado, C. Quental},
-  journal={Under Review},
-  year={2026}
+@article{thoraxssm2026,\
+  title={Thorax Shape Reconstruction from Limited CT-digitized Palpable Landmarks using Statistical Shape Modeling},\
+  author={R. Alcobia, J. Folgado, C. Quental},\
+  journal={Under Review},\
+  year={2026}\
 }
