@@ -87,18 +87,15 @@ This section describes the format of the input file used by `--filename`, not th
 The input file is a row-based CSV file containing subject demographics and anatomical landmark coordinates.
 The expected format is as follows:
 
-Sex     0  (0 = female, 1 = male)\
-Age     33 (years)\
-
-|Weight  82.8
-
-|Height  1.65
-
-C7      15.3964   -236.004   -299.06
-T8      33.4965   -250.484   -476.908
-JN      16.1204   -86.1349   -362.947
-XP      24.4464   -31.4726   -485.542
-R10     208.344   -115.819   -601.229
+Sex     0                             (0 = female, 1 = male)\
+Age     33                            (years)\
+Weight  82.8                          (kg)\
+Height  1.65                          (m)\
+C7      15.3964   -236.004   -299.06  (x, y, and z coordinates)\
+T8      33.4965   -250.484   -476.908 (x, y, and z coordinates)\
+JN      16.1204   -86.1349   -362.947 (x, y, and z coordinates)\
+XP      24.4464   -31.4726   -485.542 (x, y, and z coordinates)\
+R10     208.344   -115.819   -601.229 (x, y, and z coordinates)
 
 
 An example file is provided in:
