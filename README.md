@@ -20,7 +20,8 @@ This repository accompanies the manuscript:
 currently under review.
 
 If you use this code, please cite the above publication.
-⚠️ Scope of This Repository
+
+## ⚠️ Scope of This Repository
 This repository includes:
 - Reconstruction algorithms
 - Pre-trained statistical shape models of the thorax
@@ -47,26 +48,24 @@ pip install -r requirements-lock.txt
 
 ## 🚀 Usage
 
-### Quick Start
+### 1. Quick Start
 Clone the repository:
-```bash
 git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
 cd thorax-ssm-reconstruction
-```
 
 Install dependencies:
 ```
 pip install -r requirements.txt
 ```
 
-### Running the reconstruction
+### 2. Running the reconstruction
 Run the reconstruction pipeline:
 ```
 python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-based
 ```
 
 
-📥 Input
+### 📥 Input
 
 --filename: name of the input CSV file (without extension), e.g. example_subject.csv. It must be saved in the InputData folder.
 
@@ -83,7 +82,7 @@ Optional arguments:
 --compare: name of .stl file (without extension) for comparison (if applicable)
 
 
-📥 Output
+### 📥 Output
 
 Reconstructed thorax surface saved as .stl in the Results/ folder
 
