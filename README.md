@@ -1,6 +1,7 @@
 📌 Title
 # Thorax Reconstruction from Sparse Inputs using Statistical Shape Models
-📖 Description
+## 📖 Description
+
 This repository provides the implementation of a reconstruction framework for estimating subject-specific thorax geometries from sparse input data.
 
 The method takes as input:
@@ -11,8 +12,10 @@ and outputs a reconstructed 3D thorax surface based on a pre-trained statistical
 
 This repository focuses on the **application stage** of the method, enabling researchers to reconstruct thorax geometries without requiring medical imaging data.
 
-📄 Associated Publication
+## 📄 Associated Publication
+
 This repository accompanies the manuscript:
+
 "Thorax Shape Reconstruction from Limited CT-digitized Palpable Landmarks using Statistical Shape Modeling"
 currently under review.
 
@@ -24,8 +27,8 @@ This repository includes:
 - Pre-trained regression models for mapping skin landmarks to bone landmarks
 - Example scripts for running the reconstruction pipeline
 
-⚙️ Installation
-### Requirements
+## ⚙️ Installation
+Requirements
 - Python >=3.10, <3.13 (due to `open3d` compatibility)
 
 For standard use:
@@ -42,9 +45,9 @@ pip install -r requirements-lock.txt
 - `requirements-lock.txt`: exact environment used for development and testing  
 ```
 
-🚀 Usage
+### 🚀 Usage
 
-### Quick Start
+# Quick Start
 Clone the repository:
 ```bash
 git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
@@ -56,24 +59,28 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-### Running the reconstruction
+# Running the reconstruction
 Run the reconstruction pipeline:
 ```
 python SSM-thorax-reconstruction.py --filename data/example_subject --method SSM-SL-based
 ```
 
 📥 Input
+
 --filename: name of the input CSV file (without extension), e.g. example_subject.csv
+
 --method: reconstruction method
    - SSM-SL-based (reconstruction using the SSM with embedded skin landmarks)
    - SSM-BL-based (skin landmark to bone landmark mapping followed by reconstruction using the SSM without embedded skin landmarks)
 
 Optional arguments:
+
 --PCs: number of principal components (default: 8)
 --Plot: True to visualize the reconstruction at the end
 --compare: name of .stl file (without extension) for comparison (if applicable)
 
 📥 Output
+
 Reconstructed thorax surface saved as .stl in the Results/ folder
 
 ### Example
