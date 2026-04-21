@@ -80,6 +80,7 @@ python SSM-thorax-reconstruction.py --filename example_subject --method SSM-SL-b
 - `--Plot`: set to `True` to visualize reconstruction  
 - `--compare`: name of `.stl` file (without extension) for comparison
 
+
 ### 📄 CSV Input data format
 
 This section describes the format of the input file used by `--filename`, not the function arguments.
