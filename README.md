@@ -28,8 +28,6 @@ This repository includes:
 ### Requirements
 - Python >=3.10, <3.13 (due to `open3d` compatibility)
 
-### Installation
-
 For standard use:
 ```
 pip install -r requirements.txt
@@ -45,9 +43,39 @@ pip install -r requirements-lock.txt
 ```
 
 🚀 Usage
-### Running the reconstruction
 
-python scripts/run_reconstruction.py
+### Quick Start
+Clone the repository:
+```bash
+git clone https://github.com/PROMOTE-BIO/thorax-ssm-reconstruction.git
+cd thorax-ssm-reconstruction
+```
+
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+
+### Running the reconstruction
+Run the reconstruction pipeline:
+```
+python run_reconstruction.py --filename data/example_subject --method SSM-SL-based
+```
+
+Input
+--filename: name of the input CSV file (without extension), e.g. example_subject.csv
+--method: reconstruction method
+SSM-SL-based (skin landmarks)
+SSM-BL-based (bony landmarks)
+
+Optional arguments:
+
+--PCs: number of principal components (default: 2)
+--Plot: True to visualize the reconstruction
+--compare: name of .stl file (without extension) for comparison
+Output
+Reconstructed thorax surface saved as .stl in the Results/ folder
+Optional visualization using open3d
 
 ### Example
 
