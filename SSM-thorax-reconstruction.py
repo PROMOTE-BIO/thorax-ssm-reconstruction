@@ -360,7 +360,7 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
             CompSettings['StlToComp'] = '' # Path to the stl to compare (Originally, solname)
             CompSettings['ExistsSol'] = "No"
         else:
-            CompSettings['StlToComp'] = f"{cwd}\\{CompareSol}.stl"
+            CompSettings['StlToComp'] = f"{cwd}\\InputData\\{CompareSol}.stl"
         
         " Processes the skin and subject-specific parameters "
         # Reads data from the file and organizes the data into demographics and landmark

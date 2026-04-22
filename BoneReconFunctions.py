@@ -835,7 +835,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             
             KvalOpt_GA = [-3 if gene < -3 else 3 if gene > 3 else gene for gene in KvalOpt_GA]
           
-            print(f'{NEigVal} PCs with GA:')
+            print('GA:')
             print(f'    Sol: {KvalOpt_GA}')
             print(f'    Fitness Value: {round(fit,4)}')
             
@@ -853,7 +853,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
                 
                 KvalOpt = [-3 if gene < -3 else 3 if gene > 3 else gene for gene in KvalOpt]
                 
-                print(f'{NEigVal} PCs with TNC:')
+                print('TNC:')
                 print(f'    Sol: {KvalOpt}')
                 print(f'    Fitness Value: {round(result.fun,4)}')
     
@@ -908,7 +908,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             
             KvalOpt_GA = [-3 if gene < -3 else 3 if gene > 3 else gene for gene in KvalOpt_GA]
           
-            print(f'{PC} PCs with GA:')
+            print('GA:')
             print(f'    Sol: {KvalOpt_GA}')
             print(f'    Fitness Value: {round(fit,4)}')
             
@@ -918,7 +918,6 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             
             search_space = [skopt.space.space.Real(-3,3) for i in range(num_genes)]
             
-            print('BAYESIAN OPTIMIZATION')
             res = skopt.gp_minimize(FitnessFuncSSMReconstruct_Min(StatModel, closest_points, landmarkpcd, T_final),            # the function to minimize
                   search_space,      # the bounds on each dimension of x
                   x0=[0. for i in range(num_genes)],            # the starting point
@@ -929,17 +928,14 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         
             KvalOpt_GA, fit, calls = res.x, res.fun, 25*num_genes
             
-            print(f'{PC} PCs with GA:')
+            print('Bayesian Optimization:')
             print(f'    Sol: {KvalOpt_GA}')
             print(f'    Fitness Value: {round(fit,4)}')
             
         elif opt == 'Pattern':
             
-            print('PATTERN SEARCH')
             search_space = {}
             for i in range(num_genes):
-                
-                
                 
                 search_space[f'PC{i+1}'] = np.arange(-3, 3, 0.01)
                 
@@ -965,11 +961,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
-            print(calls)
+            print('Pattern search:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
             
         elif opt == 'DIRECT':
             
-            print('DIRECT ALGORITHM')
             search_space = {}
             for i in range(num_genes):
                 
@@ -987,8 +984,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             
+            print('Direct Algorithm:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'RandomHill':
-            print('RandomHill')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1005,8 +1006,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
             
+            print('Random Hill:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt== 'RandomAna':
-            print('RandomAna')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1025,9 +1030,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
             
+            print('Random Ana:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'Bayes2':
             
-            print('Bayes2')
             search_space = {}
             for i in range(num_genes):
                 
@@ -1043,8 +1051,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             
+            print('Bayesian Optimizer 2:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'Lip':
-            print('Lip')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1062,8 +1074,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             
+            print('Lipschitz Optimizer:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'Random':
-            print('Random')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1080,8 +1096,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
             
+            print('Random Search:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'Parallel':
-            print('Parallel')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1099,8 +1119,12 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
             
+            print('Parallel Tempering Optimization:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'Grid':
-            print('Grid')
+            
             search_space = {}
             for i in range(num_genes):
                 
@@ -1116,11 +1140,14 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             
+            print('Grid Search:')
+            print(f'    Sol: {KvalOpt_GA}')
+            print(f'    Fitness Value: {round(fit,4)}')
+            
         elif opt == 'DIRECT2':
             
             search_space = [(-3,3) for i in range(num_genes)]
             
-            print('DIRECT2')
             if PC <= 5:
                 res = direct(FitnessFuncSSMReconstruct_TNC(StatModel, closest_points, landmarkpcd, T_final, reg, c),            # the function to minimize
                   search_space, vol_tol=10**(-5*PC), maxiter=500*PC, maxfun=10000 + 1000*PC)
@@ -1130,10 +1157,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         
             KvalOpt_GA, fit, calls = copy.deepcopy(res.x), res.fun, res.nfev
             
-            print(f'{PC} PCs with GA:')
+            print('Direct Algorithm 2:')
             print(f'    Sol: {KvalOpt_GA}')
             print(f'    Fitness Value: {round(fit,4)}')
-            print(res.message)       
+            #print(res.message)       
             
         # Make one iteration of the TNC with KvalOpt_GA as initial guess
         # To assert we get to a minimum, at least locally
@@ -1152,7 +1179,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
                 
                 KvalOpt = [-3 if gene < -3 else 3 if gene > 3 else gene for gene in KvalOpt]
                 
-                print(f'{PC} PCs with TNC:')
+                print('TNC:')
                 print(f'    Sol: {KvalOpt}')
                 print(f'    Fitness Value: {round(result.fun,4)}')
     
@@ -1536,8 +1563,8 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
         o3d.visualization.draw_geometries([OptGeom['Pcd'].paint_uniform_color(blue),
                                                pcd_new_cp.paint_uniform_color(red)])
     
-        print('Result of PyCPD: ', np.asarray(cpdRes.points))
-        print('Source: ', np.asarray(OptGeom['Pcd'].points))
+        #print('Result of PyCPD: ', np.asarray(cpdRes.points))
+        #print('Source: ', np.asarray(OptGeom['Pcd'].points))
     
     # Get distance-metric between reconstruction and original geometries
     displacement = np.asarray(OptGeom['Pcd'].points) - np.asarray(pcd_new_cp.points)[CPDCor]

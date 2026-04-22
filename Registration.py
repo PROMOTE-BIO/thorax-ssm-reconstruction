@@ -195,12 +195,12 @@ def CustomCPD(source, target, instance, SSMSettings, Stiffness, landmarks_positi
         result_pycpd = copy.deepcopy(result) # for visualization purposes
         
         
-        t_bcpd_i = time.time()
+        # t_bcpd_i = time.time()
         tf_points_bcpd, CPDCorrespondences_bcpd = BCPD(target_cpp, source_cpp, CPDSettings, SSMSettings["Landmarks"], landmarks_positions, center)
         
-        print(CPDCorrespondences_bcpd)
+        #print(CPDCorrespondences_bcpd)
         
-        t_bcpd = time.time() - t_bcpd_i
+        # t_bcpd = time.time() - t_bcpd_i
         
         result_bcpd = copy.deepcopy(o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(tf_points_bcpd)))
         
@@ -211,15 +211,15 @@ def CustomCPD(source, target, instance, SSMSettings, Stiffness, landmarks_positi
         final = [target_cp, result_bcpd]
         o3d.visualization.draw_geometries([target_cp, result_bcpd, result_pycpd])
 
-        print(t_bcpd, t_pycpd)
+        #print(t_bcpd, t_pycpd)
         
         #TargetGeom = GetGeom(o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(target_cpp)))
         #BCPDGeom = GetGeom(result_bcpd)
         #PyCPD = GetGeom(result_pycpd)
         
-        CompareAlgorithms(MeshData, result_bcpd, result_pycpd)
+        #CompareAlgorithms(MeshData, result_bcpd, result_pycpd)
         
-        print(MeshData)
+        #print(MeshData)
 
     elif CpdAlgorithm == 'BCPD':
         
@@ -232,7 +232,8 @@ def CustomCPD(source, target, instance, SSMSettings, Stiffness, landmarks_positi
         '''
         target_cp.paint_uniform_color([1, 0, 0])
         result.paint_uniform_color([0, 1, 0])
-        o3d.visualization.draw_geometries([target_cp, result])'''
+        o3d.visualization.draw_geometries([target_cp, result])
+        '''
 
     if (CpdAlgorithm == 'Compare'):
         
@@ -263,9 +264,7 @@ def CustomCPD(source, target, instance, SSMSettings, Stiffness, landmarks_positi
             CPDCorrespondences = np.asarray(range(SSMSettings['SamplingPoints'] + SSMSettings["Landmarks"])) # Caso só haja landmarks
         else: CPDCorrespondences = np.asarray(range(SSMSettings['SamplingPoints']))
         
-    print(CPDCorrespondences)
-    print(len(CPDCorrespondences))
-    print( f'Matching = {round(len(np.unique(CPDCorrespondences))/len(CPDCorrespondences)*100,2)} %')
+    #print( f'Matching = {round(len(np.unique(CPDCorrespondences))/len(CPDCorrespondences)*100,2)} %')
     
     return result, CPDCorrespondences, tf_param, CPDMaxProbabilities, ProbabilityCor
 
@@ -441,7 +440,7 @@ def getCorrespondence(correspondence_raw, NPoints):
             
             correspondence[i] = sub_n[arg_max]
             
-    print(f'Matching = {round(len(np.unique(correspondence))/len(correspondence)*100,2)} %')
+    #print(f'Matching = {round(len(np.unique(correspondence))/len(correspondence)*100,2)} %')
     
     return correspondence
         

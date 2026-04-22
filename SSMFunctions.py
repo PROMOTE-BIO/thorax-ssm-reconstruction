@@ -79,17 +79,6 @@ def SSMBuild(StatModel, MeshData, SSMSettings, thresh, plots=False):
 
     return StatModel, pca_object
 
-'''def transform(StatModel, shape):
-    
-    print(StatModel['SSM']['Mean'].shape)
-    print((shape.T.flatten()-StatModel['SSM']['Mean']).shape)
-    print(np.diag(1/np.sqrt(StatModel['SSM']['EigVal'])).shape)
-    print((StatModel['SSM']['EigVec'].T).shape)
-    k = np.diag(1/np.sqrt(StatModel['SSM']['EigVal']))@StatModel['SSM']['EigVec'].T@(shape.T-StatModel['SSM']['Mean'].reshape((len(shape.T), 1)))
-    print(k.shape)
-        
-    return k'''
-
 def SSMReconstruction(StatApp, Kval, SSMSettings, originalsize):
     """
 
