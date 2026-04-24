@@ -194,11 +194,11 @@ def CheckPC(pca, StatApp, EigRel, SSMSettings, MeshData, center, landmarks_posit
     PolyDataMean = PolyDataMean.smooth(n_iter=iters)
 
     if SSMSettings["Landmarks"] > 0:
-        # Cria uma esfera à volta de cada landmark apenas para visualização
+        # Creates a sphere at the landmarks just for visualization purposes
         PolyDataMean = SphereLandmarks(MeshOutMean, PolyDataMean, SSMSettings["Landmarks"], landmarks_positions, plots)
 
     if center:
-        # Create a sphere around the center point, for visualization proposes
+        # Create a sphere around the center point, for visualization purposes
         PolyDataMeanCenter = SphereCenter(MeshOutMean, PolyDataMean, plots)
 
         PolyDataMean = PolyDataMeanCenter
@@ -221,7 +221,6 @@ def CheckPC(pca, StatApp, EigRel, SSMSettings, MeshData, center, landmarks_posit
         MeshOutPlus = SSMReconstruction(
             StatApp, Kval, SSMSettings, originalsize=True)
 
-
         # Applies -3 SD to the current eigrel
         Kval[i] = -3
 
@@ -237,18 +236,18 @@ def CheckPC(pca, StatApp, EigRel, SSMSettings, MeshData, center, landmarks_posit
         PolyDataMinus = PolyDataMinus.smooth(n_iter=iters)
 
         if SSMSettings["Landmarks"] > 0:
-        # Cria uma esfera à volta de cada landmark apenas para visualização
+        # Creates a sphere at the landmarks just for visualization purposes
             PolyDataPlus = SphereLandmarks(MeshOutPlus, PolyDataPlus, SSMSettings["Landmarks"], landmarks_positions, plots)
 
             PolyDataMinus = SphereLandmarks(MeshOutMinus, PolyDataMinus, SSMSettings["Landmarks"], landmarks_positions, plots)
 
         if center:
-            # Create a sphere around the center point, for visualization proposes
+            # Creates a sphere at the landmarks just for visualization purposes
             PolyDataPlusCenter = SphereCenter(MeshOutPlus, PolyDataPlus, plots)
 
             PolyDataPlus = PolyDataPlusCenter
 
-            # Create a sphere around the center point, for visualization proposes
+            # Creates a sphere at the landmarks just for visualization purposes
             PolyDataMinusCenter = SphereCenter(
                 MeshOutMinus, PolyDataMinus, plots)
 

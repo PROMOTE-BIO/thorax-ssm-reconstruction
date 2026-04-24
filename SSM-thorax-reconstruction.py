@@ -300,9 +300,6 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
     if (CompareSol == None):
         CompareSol = 'False'
         
-    # SubjectFile: string of the csv file containing subject data
-    # RecontructMethod: string with either 'SSM-SL-based', 'SSM-BL-based'
-    
     # Checks if the subjectfile is not empty and it the file exists. It only
     # continues if the file exists
     if ((SubjectFile != '' and os.path.exists(f"{cwd}\\InputData\\{SubjectFile}.csv")) and
@@ -313,16 +310,16 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
         start = time.process_time()
     
         # Reconstruction settings
-        ReconSettings = {'Bone': "Thorax", # Originally boneopt
-                         'NTrain': 60, # Number of subjects used for training the SSM (Originally, NModels)
-                         'NPoints': 20000, # Number of points in the base point cloud (Originally, points)
-                         'NonRegAlg': "BCPD", # Algorithm for the non-rigid registration (Originally, algorithm)
+        ReconSettings = {'Bone': "Thorax", # Bone to be processed
+                         'NTrain': 60, # Number of subjects used for training the SSM
+                         'NPoints': 20000, # Number of points in the base point cloud
+                         'NonRegAlg': "BCPD", # Algorithm for the non-rigid registration
                          'Plots': False, # Boolean for debugging
                          'PC': int(nPCs), # Number of principal components to use
-                         'ReconsAlg': "SSM-Opt", # Type of reconstruction method: SSM-Opt uses optimmization while SSM-Reg uses linear regression with SSM. For the thorax, only the SSM-Opt is available
+                         'ReconsAlg': "SSM-Opt", # Type of reconstruction method: SSM-Opt uses optimmization while SSM-Reg uses linear regression with SSM. For the thorax, only the SSM-Opt is available.
                          'ReconsMethod': ReconstructMethod,
                          'PCSol': None, # PC solution, if available (mainly for SSM-Reg)
-                         'OutputName': f"{cwd}\\Results\\{SubjectFile}" # Name of the output file with error metrics (Originally, resultname)
+                         'OutputName': f"{cwd}\\Results\\{SubjectFile}" # Name of the output file with error metrics
                          }
         # Default number of principal components
         if (ReconSettings['PC'] == -1):
@@ -342,22 +339,22 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
                                                   ReconSettings['NPoints'] + ReconSettings['NLandmark']))
             
         # Optimization settings
-        OptSettings = {'OptApproach': 'fast', # Optimization approach (Originally, tipo)
-                       'OptAlgorithm': 'DIRECT2', # Optimization algorithm (Originally, opt)
+        OptSettings = {'OptApproach': 'fast', # Optimization approach 
+                       'OptAlgorithm': 'DIRECT2', # Optimization algorithm
                        'RegularizationTerm': 'Sobral', # Type of regularization term to use. There are two options: "Marques" based on the paper "Reconstruction of Scapula Bone Shapes from Digitized Skin Landmarks Using Statistical Shape Modeling and Multiple Linear Regression"; and "Sobral", like the regularization used in the thorax paper
-                       'RegularizationWeight': 0.1, # Regularization factor in the optimization problem (Originally, c)
-                       'GradAtEnd': True, # Bool to tell whether a gradient algorithm (TNC) is to be used at the end of the optimization (Originally, TNC)
+                       'RegularizationWeight': 0.1, # Regularization factor in the optimization problem
+                       'GradAtEnd': True, # Bool to tell whether a gradient algorithm (TNC) is to be used at the end of the optimization
                        'Radius': 0 # Testing variable. Not relevant for now.
                        }
                 
         # Comparison settings
-        CompSettings = {'ExistsSol': "Yes", # "Yes" or "No" depending on whether a solution for comparison exists (Originally, sol)
+        CompSettings = {'ExistsSol': "Yes", # "Yes" or "No" depending on whether a solution for comparison exists
                         'JointCenterBool': False, # This is a boolean to tell if the joint center is a point. This does not apply to the thorax
                         'JointCenter': None, # These are the coordinates of the joint center. This does not apply to the thorax
                         'MaxIter': 250
                         }
         if (CompareSol == 'False'):
-            CompSettings['StlToComp'] = '' # Path to the stl to compare (Originally, solname)
+            CompSettings['StlToComp'] = '' # Path to the stl to compare
             CompSettings['ExistsSol'] = "No"
         else:
             CompSettings['StlToComp'] = f"{cwd}\\InputData\\{CompareSol}.stl"
@@ -476,13 +473,13 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
 
         end = time.process_time()
         elapsed = end - start
-        print(f"Case reconstructed!!")
+        print("Case reconstructed!!")
         print(f"Time elapsed: {elapsed:.2f} seconds!\n")
             
         """ 
         Plots the results
         """
-        # The OptGeom is in the local reference frame of body
+        # The OptGeom is in the local reference frame of the body
         if (PlotGeometries):
             # Skin landmarks
             Visskinlandmarks = np.array(localskinCoord.T).astype(float)
@@ -508,7 +505,7 @@ def ssm_thorax_reconstruction(SubjectFile: str = '', ReconstructMethod: str ='SS
             # Visualization of the results
             o3d.visualization.draw_geometries(VisskinlandmarkMesh)
     
-        # Saves the scapula geometry to an stl file
+        # Saves the bone geometry to an stl file
         PolyDataOpt = MeshDataToPolyData(OptGeom)
         PolyDataOpt.save(f"{cwd}\\Results\\{SubjectFile}.stl")
     else:

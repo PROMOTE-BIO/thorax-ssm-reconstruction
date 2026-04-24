@@ -102,8 +102,7 @@ def GetLocalReferenceFrame(df: pd.DataFrame, boneopt: str, reference: str):
         if reference == 'new':
         
             # Compute the unit vectors of the local coordinate frame
-            # With the coordinates in the original reference frame
-            # According to the ISB article
+            # according to the ISB article
             new_z = (AAvec - TSvec) / np.linalg.norm(AAvec - TSvec)  # unitary
             new_x = np.cross(AAvec - TSvec, AIvec - TSvec)  # pointing forward
             new_x = new_x / np.linalg.norm(new_x) # unitary
@@ -122,8 +121,7 @@ def GetLocalReferenceFrame(df: pd.DataFrame, boneopt: str, reference: str):
         elif reference == 'old':
             
             # Compute the unit vectors of the local coordinate frame
-            # With the coordinates in the original reference frame
-            # According to the ISB article
+            # according to the paper by Meskers et al. (1998)
             new_x = (ACvec - TSvec) / np.linalg.norm(ACvec - TSvec)  # unitary
             new_z = np.cross(TSvec - ACvec, AIvec - ACvec)  # pointing backward
             new_z = new_z / np.linalg.norm(new_z) # unitary
@@ -140,8 +138,9 @@ def GetLocalReferenceFrame(df: pd.DataFrame, boneopt: str, reference: str):
             # The sign must be negative so that the formula returns (0,0,0)
             T[:3, 3] = - np.dot(T[:3, :3], ACvec)
     
-    #TODO make 2 new elif clauses for the Humerus and Clavicle bone transformations, according to ISB article
+    # TODO make 2 new elif clauses for the Humerus and Clavicle bone transformations, according to ISB article
     elif boneopt == "Thorax":
+      
         # Get the numpy arrays of the landmarks coordinates needed for the transformation
         C7vec = np.asarray(df['C7'], dtype = float)
         T8vec = np.asarray(df['T8'], dtype = float)
@@ -149,13 +148,15 @@ def GetLocalReferenceFrame(df: pd.DataFrame, boneopt: str, reference: str):
         XPvec = np.asarray(df['XP'], dtype = float)
         R10vec = np.asarray(df['R10'], dtype = float)
 
+        # Compute the unit vectors of the local coordinate frame
+        # according to ISB
         Ot = JNvec
-        MXP_T8 = (XPvec + T8vec)/2
-        MJN_C7 = (JNvec + C7vec)/2
+        MXP_T8 = (XPvec + T8vec) / 2
+        MJN_C7 = (JNvec + C7vec) / 2
         yt = MJN_C7 - MXP_T8
-        Yt = yt/np.linalg.norm(yt) # normalizar o vetor
+        Yt = yt/np.linalg.norm(yt) # Normalized y, pointing upward
         zt = np.cross((JNvec - MXP_T8),(C7vec - MXP_T8))
-        Zt = zt/np.linalg.norm(zt) # normalizar o vetor
+        Zt = zt/np.linalg.norm(zt) # Normalized z, pointing laterally
         Xt = np.cross(Yt, Zt)
 
         # Compute the general transformation matrix (4x4)
@@ -217,14 +218,14 @@ def GetLocalLandmark(filepath: str, boneopt: str):
         Homogeneous transformation matrix
     """
     
-    # Get the landmarks from a random geometry 
+    # Get the landmarks from the current geometry 
     tagdfcoords = pd.read_csv(filepath, sep = ',', header = None, index_col = False).T 
     
     # Make columns the landmarks and the three entries the x, y, z coordinates
     tagdfcoords.columns = tagdfcoords.iloc[0]
     tagdfcoords.drop(0, inplace = True)  # index remains 1, 2 and 3
     
-    # Get translation and rotation matrixes for alignment
+    # Get translation and rotation matrices for alignment
     R, t, T = GetLocalReferenceFrame(tagdfcoords, boneopt, 'new')
     
     # Transform data to numpy array and apply transformation
@@ -261,7 +262,7 @@ def GetLocalLandmarkFromCoord(tagdfcoords, boneopt: str):
     # This function is similar to GetLocalLandmark, but instead of reading coordinates
     # from a file, it already receives these as input
 
-    # Get translation and rotation matrixes for alignment
+    # Get translation and rotation matrices for alignment
     R, t, T = GetLocalReferenceFrame(tagdfcoords, boneopt, 'new')
     
     # Transform data to numpy array and apply transformation
@@ -306,7 +307,7 @@ def ReadSSMInfo(StatModel_info: dict, boneopt: str, plots: bool = False):
     if plots:
         o3d.visualization.draw_geometries([StatModel['MVShape']['Mesh']])
 
-    # Comput the MVShape point cloud from the points numpy array
+    # Compute the MVShape point cloud from the points numpy array
     StatModel['MVShape']['Pcd'] =  o3d.geometry.PointCloud()
     StatModel['MVShape']['Pcd'].points = o3d.cpu.pybind.utility.Vector3dVector(StatModel_info['MVShape']['Pcd']['Points'])
     StatModel['MVShape']['Pcd'].estimate_normals()
@@ -343,9 +344,9 @@ def ProcessAverageShape(StatModel: dict, boneopt: str, mean_shape_path, plots: b
     
     """
 
-    ## Find closest points,in AverageShape, to the AVShape bony landmarks
-    ## Might be different from the MVShape because of the added mean displacement added (it is, that is why we do it)
-    ## The SD added is assumed to not modify the point closest to the landmarks 
+    ## Find closest points, in AverageShape, to the AVShape bony landmarks
+    ## Might be different from the MVShape because of the added mean displacement
+    ## The SD added is assumed to not modify the points closest to the landmarks 
     
     # Get average shape
     AVShape = SSMReconstruction(StatModel, [0], None, originalsize = True)
@@ -356,12 +357,11 @@ def ProcessAverageShape(StatModel: dict, boneopt: str, mean_shape_path, plots: b
     tagdfcoords = pd.read_csv(filepath, sep = ',', header = None, index_col = False).T 
     tagdfcoords.columns = tagdfcoords.iloc[0]
     tagdfcoords.drop(0, inplace = True)
+    # TODO create 2 elif's for Clavicle and Humeruss
     if boneopt == 'Scapula':
         tagdfcoords = tagdfcoords[['AA', 'TS', 'AI', 'AC']]
     elif boneopt == "Thorax":
-        tagdfcoords = tagdfcoords[['C7', 'T8', 'JN', 'XP', 'R10']]
-
-    #TODO create 2 elif's for Clavicle and Humeruss
+        tagdfcoords = tagdfcoords[['C7', 'T8', 'JN', 'XP', 'R10']]    
     avlandmarks = np.array(tagdfcoords.T).astype(float)
     
     # Submit the av shape landmarks to the same process of the SSM
@@ -416,7 +416,7 @@ def ProcessAverageShape(StatModel: dict, boneopt: str, mean_shape_path, plots: b
         o3d.visualization.draw_geometries([AVShape['Pcd'],
                                            landmarkavpcd.paint_uniform_color(green)])
     
-    # Print the difference between the choosen points and the av landmarks 
+    # Print the difference between the chosen points and the av landmarks 
     # These should be the lowest possible
     # dif = np.linalg.norm(avpoints[closest_points_av] - landmarksavpoints, axis = 1)
     # print('Difference between closest points in av shape and reference landmarks (mm):')
@@ -488,11 +488,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             # Build current geometry 
             CurGeom = SSMReconstruction(StatModel, kvals, None, originalsize = True)
             
-            #TODO this next step is not advisable to be in fitness function. 
-            # It will just make it more computational expensive
-            # In the future, pass all the SSM code to local coordinates and this is not needed
-            # For now it is necessary, as the eigenvalues and eigen vectors are defined
-            # using the previously defined reference frame generated by the inertia alignment
+            #TODO This next step may be avoided in future releases as it is 
+            # unnecessary within the fitness function and only increases computational time.
+            # The SSM is built in the inertial reference frame, so it must be 
+            # transformed to the body-fixed reference frame being used now.
             
             # Pass current geometry to local coordinate frame (the mesh is not needed)
             # Point Cloud
@@ -500,12 +499,13 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
 
             # Make point cloud with closest points
             closest_points_pcd = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(np.asarray(CurGeom['Pcd'].points)[closest_points_]))
+            
             # Perform rigid registration
             # This makes the reconstruction match its closest points to the landmarks, besides minimizing the distance
-            # This is done even if both geometry and landmarks are in the same local reference frame, as the transformation
-            # Might not be perfect for all cases
-            #TODO in the future it is advisable to take this rigid registration out, as it induces some random variability for the solution
-            # That is, running twice the 2 lines below come different RigidReg variables
+            # This is done even if both geometry and landmarks are in the same local 
+            # reference frame, as the transformation might not be perfect for all cases. 
+            # This can likely be softened in future releases by a closed-form transformation, 
+            # making the reconstruction much faster.
             RigidReg = o3d.pipelines.registration.registration_icp(closest_points_pcd, 
                                                                    pcd, 
                                                                    2 * np.max(pcd.compute_nearest_neighbor_distance()))
@@ -522,6 +522,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
                 
                 regularization = np.sum(c*(1/(eigValArr/eigValArr[0]))*np.square(kvals))
             
+            # The fitness function of PyGad is written as a maximization instead of a minimization
+            # this implies that the fitness must come with a negative sign
+            # TODO - When in using skin-to-bone mapping, include weights in the displacement values, 
+            # for each 'landmark+coord', based on the predictive error of the regression models
             f = - (np.sum(np.square(np.asarray(closest_points_pcd.points) - np.asarray(pcd.points))) + regularization)
             
             return f
@@ -543,11 +547,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             # Build current geometry 
             CurGeom = SSMReconstruction(StatModel, kvals, None, originalsize = True)
             
-            #TODO this next step is not advisable to be in fitness function. 
-            # It will just make it more computational expensive
-            # In the future, pass all the SSM code to local coordinates and this is not needed
-            # For now it is necessary, as the eigenvalues and eigen vectors are defined
-            # using the previously defined reference frame generated by the inertia alignment
+            # TODO This next step may be avoided in future releases as it is 
+            # unnecessary within the fitness function and only increases computational time.
+            # The SSM is built in the inertial reference frame, so it must be 
+            # transformed to the body-fixed reference frame being used now.
             
             # Pass current geometry to local coordinate frame (the mesh is not needed)
             # Point Cloud
@@ -555,12 +558,13 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
 
             # Make point cloud with closest points
             closest_points_pcd = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(np.asarray(CurGeom['Pcd'].points)[closest_points_]))
+            
             # Perform rigid registration
             # This makes the reconstruction match its closest points to the landmarks, besides minimizing the distance
-            # This is done even if both geometry and landmarks are in the same local reference frame, as the transformation
-            # Might not be perfect for all cases
-            #TODO in the future it is advisable to take this rigid registration out, as it induces some random variability for the solution
-            # That is, running twice the 2 lines below come different RigidReg variables
+            # This is done even if both geometry and landmarks are in the same local 
+            # reference frame, as the transformation might not be perfect for all cases. 
+            # This can likely be softened in future releases by a closed-form transformation, 
+            # making the reconstruction much faster.
             RigidReg = o3d.pipelines.registration.registration_icp(closest_points_pcd, 
                                                                    pcd, 
                                                                    2 * np.max(pcd.compute_nearest_neighbor_distance()))
@@ -568,11 +572,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             closest_points_pcd.transform(RigidReg.transformation)
             
             # Evaluation for current geometry 
-            # The fitness function of PyGad is written as a maximization instead of  a minimization
+            # The fitness function of PyGad is written as a maximization instead of a minimization
             # this implies that the fitness must come with a negative sign
-            #TODO include weight in the displacement values, for each 'landmark+coord', computed using the 
-            # test error of the respective regression model (more error = less penalization of the sum of squares of the displacement)
-            # vide mail Quental 08-Aug-2023
+            # TODO - When in using skin-to-bone mapping, include weights in the displacement values, 
+            # for each 'landmark+coord', based on the predictive error of the regression models
             
             if reg == 'Marques':
                 
@@ -598,11 +601,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             # Build current geometry 
             CurGeom = SSMReconstruction(StatModel, kvals, None, originalsize = True)
             
-            #TODO this next step is not advisable to be in fitness function. 
-            # It will just make it more computational expensive
-            # In the future, pass all the SSM code to local coordinates and this is not needed
-            # For now it is necessary, as the eigenvalues and eigen vectors are defined
-            # using the previously defined reference frame generated by the inertia alignment
+            #TODO This next step may be avoided in future releases as it is 
+            # unnecessary within the fitness function and only increases computational time.
+            # The SSM is built in the inertial reference frame, so it must be 
+            # transformed to the body-fixed reference frame being used now.
             
             # Pass current geometry to local coordinate frame (the mesh is not needed)
             # Point Cloud
@@ -611,12 +613,13 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             # Make point cloud with closest points
             #closest_points_pcd = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(np.asarray(CurGeom['Pcd'].points)[closest_points_]))
             closest_points_pcd = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(np.asarray(CurGeom['Pcd'].points)[pointsList]))
+            
             # Perform rigid registration
             # This makes the reconstruction match its closest points to the landmarks, besides minimizing the distance
-            # This is done even if both geometry and landmarks are in the same local reference frame, as the transformation
-            # Might not be perfect for all cases
-            #TODO in the future it is advisable to take this rigid registration out, as it induces some random variability for the solution
-            # That is, running twice the 2 lines below come different RigidReg variables
+            # This is done even if both geometry and landmarks are in the same local 
+            # reference frame, as the transformation might not be perfect for all cases. 
+            # This can likely be softened in future releases by a closed-form transformation, 
+            # making the reconstruction much faster.
             RigidReg = o3d.pipelines.registration.registration_icp(closest_points_pcd, 
                                                                    pcd, 
                                                                    2 * np.max(pcd.compute_nearest_neighbor_distance()))
@@ -633,10 +636,8 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
                 regularization = c*np.sum((1/(eigValArr/eigValArr[0]))*np.square(kvals))
             
             # Evaluation for current geometry 
-            #TODO include weight in the displacement values, for each 'landmark+coord', computed using the 
-            # test error of the respective regression model (more error = less penalization of the sum of squares of the displacement)
-            # vide mail Quental 08-Aug-2023
-
+            # TODO - When in using skin-to-bone mapping, include weights in the displacement values, 
+            # for each 'landmark+coord', based on the predictive error of the regression models
             f = np.mean(np.sqrt(np.sum(np.square(np.asarray(closest_points_pcd.points) - np.asarray(pcd.points)[closestIndex]), axis=1))) + regularization
             
             return f
@@ -651,11 +652,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             # Build current geometry 
             CurGeom = SSMReconstruction(StatModel, kvals, None, originalsize = True)
             
-            #TODO this next step is not advisable to be in fitness function. 
-            # It will just make it more computational expensive
-            # In the future, pass all the SSM code to local coordinates and this is not needed
-            # For now it is necessary, as the eigenvalues and eigen vectors are defined
-            # using the previously defined reference frame generated by the inertia alignment
+            #TODO This next step may be avoided in future releases as it is 
+            # unnecessary within the fitness function and only increases computational time.
+            # The SSM is built in the inertial reference frame, so it must be 
+            # transformed to the body-fixed reference frame being used now.
             
             # Pass current geometry to local coordinate frame (the mesh is not needed)
             # Point Cloud
@@ -663,12 +663,13 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
  
             # Make point cloud with closest points
             closest_points_pcd = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(np.asarray(CurGeom['Pcd'].points)[closest_points_]))
+            
             # Perform rigid registration
             # This makes the reconstruction match its closest points to the landmarks, besides minimizing the distance
-            # This is done even if both geometry and landmarks are in the same local reference frame, as the transformation
-            # Might not be perfect for all cases
-            #TODO in the future it is advisable to take this rigid registration out, as it induces some random variability for the solution
-            # That is, running twice the 2 lines below come different RigidReg variables
+            # This is done even if both geometry and landmarks are in the same local 
+            # reference frame, as the transformation might not be perfect for all cases. 
+            # This can likely be softened in future releases by a closed-form transformation, 
+            # making the reconstruction much faster.
             RigidReg = o3d.pipelines.registration.registration_icp(closest_points_pcd, 
                                                                    pcd, 
                                                                    2 * np.max(pcd.compute_nearest_neighbor_distance()))
@@ -676,10 +677,8 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             closest_points_pcd.transform(RigidReg.transformation)
             
             # Evaluation for current geometry 
-            #TODO include weight in the displacement values, for each 'landmark+coord', computed using the 
-            # test error of the respective regression model (more error = less penalization of the sum of squares of the displacement)
-            # vide mail Quental 08-Aug-2023
-            
+            # TODO - When in using skin-to-bone mapping, include weights in the displacement values, 
+            # for each 'landmark+coord', based on the predictive error of the regression models            
             f = np.sum(np.square(np.asarray(closest_points_pcd.points) - np.asarray(pcd.points))) + np.sum(np.exp(np.square(kvals)) - np.ones(len(kvals)))
             
             return f
@@ -691,8 +690,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
     ### The predicted bony landamrks are already in the local reference frame computed by the bony landmarks
     ### given as input. As such, we will put the reference in its local reference frame as well
     ### For this we must apply the inverse transformation made in the SSM code (inertia axes)
-    ### And then apply the local transformation matrix
-    
+    ### And then apply the local transformation matrix    
     
     ## Undo general transformation matrix of the inertia axes
     # This will undo the rotation and translation of the inertia alignment, but not the scaling
@@ -705,14 +703,11 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
     T_inv[:3, 3] = StatModel['MVShape']['t']
                                                      
     # Compute new transformation matrix from reference original coordinate frame to local coordinate frame
-    # It should be the bony landmark file for the mean geometry (Ref + mu), but there is no DICOM to match
-    # Since we do not have it, we should use the bony landmarks of the mean shape, but they are in the inertial referential frame
-    # So we use the reference bony landmark file local reference frame transformation
     if reference_shape_path != None:
         _, T_new = GetLocalLandmark(reference_shape_path, boneopt)
         T_final = T_new
     else:
-        # NEW: CQ Implementation
+        
         cwd = os.getcwd()
         _, T_new = GetLocalLandmark(cwd + "\\ReferenceShape\\Ref_Skin_Landmarks.txt", boneopt)
         # The final transformation matrix from inertia frame to local frame 
@@ -723,21 +718,11 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         # Must put all translation vectors in the same reference frame (local, as is the desired one)
         T_final[:3, 3] = T_new[:3, 3] + np.dot(T_new[:3, :3], T_inv[:3, 3])
         
-        """
-        T_new = T_local
-        # The final transformation matrix from inertia frame to local frame 
-        T_final = np.eye(4)
-        # R_{local/inertia} = R_{local/original} * R_{original/inertia}
-        T_final[:3, :3] = np.dot(T_new[:3, :3], T_inv[:3, :3])
-        # T_{local/inertia} = T_{local/original} + T_{original/inertia}
-        # Must put all translation vectors in the same reference frame (local, as is the desired one)
-        T_final[:3, 3] = T_new[:3, 3] + np.dot(T_new[:3, :3], T_inv[:3, 3])
-        """
     
-
-    # Define function to change initial population according to NEigVal
-    # So that population can consider the best solutions found with previous PCs
-    # Adapted from António's code. [I think it is ugly, but makes sense and it works, so not going to waste time here...]
+    # This function is only used when tipo == slow. In this condition, the optimization
+    # problem is solved incrementaly for the PCs. This function adds the solution from
+    # the previous PCs to the initial population to ensure that as the number of PCs
+    # increases, the solution cannot get worse.
     def initial_pop(previous_solution, Npopulation, num_genes):
         
         # Values between -3 and 3 that will be added to the new PC to consider
@@ -757,7 +742,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         
         # Complete the population with random solutions (normally distributed)
         # Basically, by computing random points with 'k' samples taken from normal distribution
-        # we are taking guesses at minimums of the objective function...
+        # we are taking guesses at minima of the objective function...
         for i in range(Npopulation - len(new_vals)):
             new_sol = []
             for z in range(num_genes): 
@@ -773,13 +758,14 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
     #   - 'SingleSol'      - it identifies all PCs in a single optimization problem
     if tipo == 'slow':
         
+        # This approach considers only GA optimization followed by TNC
         sOpt = time.perf_counter()
         for NEigVal in range(1, PC + 1):
             
             # Defines the parameters for the optimization GA algorithm
             # Highly mutable, modifiable and context-dependent. The best way to choose these parameters
-            # Is via trial-and-error. A lot of papers exist about the selection of GA parameters, but no use
-            # Depends on the problem...
+            # is via trial-and-error. A lot of papers exist about the selection of GA parameters, but they are of no use
+            # as the parameters depend on the problem...
             
             num_genes = NEigVal
             num_generations = int(150 * num_genes)
@@ -806,7 +792,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             else:
                 
                 # Population will take into account 'N-1' best solution, with the new NEigVal taking 
-                # values between 3 and 3, with interval of 0.5.
+                # values between -3 and 3, with interval of 0.5.
                 # With keep_elitism = True, this ensures that increasing the number of PCs does not produce 
                 # a worst solution
                 initial_population = initial_pop(KvalOpt, sol_per_pop, num_genes)
@@ -867,6 +853,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         
         sOpt = time.perf_counter()
         
+        # GA parameters. They do not matter for the remaining algorithms
         num_genes = PC
         num_generations = int(50 * num_genes)
         num_parents_mating = int(round(0.1 * num_generations))
@@ -916,6 +903,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             
         elif opt == 'Bayes':
             
+            # Search space
             search_space = [skopt.space.space.Real(-3,3) for i in range(num_genes)]
             
             res = skopt.gp_minimize(FitnessFuncSSMReconstruct_Min(StatModel, closest_points, landmarkpcd, T_final),            # the function to minimize
@@ -961,6 +949,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             fit = opt.search_data.tail(1)['score']
             KvalOpt_GA = opt.search_data.tail(1).to_numpy()[0][1:]
             calls = len(opt.iter_times)
+            
             print('Pattern search:')
             print(f'    Sol: {KvalOpt_GA}')
             print(f'    Fitness Value: {round(fit,4)}')
@@ -1186,10 +1175,10 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
             else:
                 KvalOpt =  copy.deepcopy(KvalOpt_GA)
                 
-        else:
+        else:           
             
-            
-                KvalOpt =  copy.deepcopy(KvalOpt_GA)
+            KvalOpt =  copy.deepcopy(KvalOpt_GA)
+        
         # Register time of optimization procedure
         tOpt = time.perf_counter() - sOpt
 
@@ -1211,7 +1200,7 @@ def ReconstructFromLandmark(StatModel: dict, landmarkpcd: o3d.geometry.PointClou
         o3d.visualization.draw_geometries([OptGeom['Pcd'].paint_uniform_color(red),
                                            landmarkpcd.paint_uniform_color(green)])
 
-    # Get closest points choosen and plot geometries again
+    # Get closest points chosen and plot geometries again
     # Define colors for the reconstructed model + closest points
     OptGeomCoords = np.asarray(OptGeom['Pcd'].points)
 
@@ -1310,7 +1299,6 @@ def modelReconstruction(PCs, NPc, StatModel, boneopt, mode, reference_shape_path
     NPc: 
         Number of principal components
     """
-
     
     T_inv = np.eye(4)
     T_inv[:3, :3] = StatModel['MVShape']['R']
@@ -1384,7 +1372,6 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
     # Decimate original mesh until it is with same number of points of reconstruction
     NPoints = len(np.asarray(OptGeom['Pcd'].points))
 
-    # mesh = SurfaceMeshSampling(trimesh.exchange.load.load(stlpath).as_open3d, int(NPoints)) # n tem as_open3d nesta versão
     o3d_mesh = trimesh_to_open3d(trimesh.exchange.load.load(stlpath))
     mesh = SurfaceMeshSampling(o3d_mesh, int(NPoints))
     pcd_new = o3d.geometry.PointCloud(o3d.cpu.pybind.utility.Vector3dVector(mesh.vertices))
@@ -1406,15 +1393,6 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
         NPoints = NPoints - 1
         pcd_new.points.append(center)
 
-    # Now we have our reconstruction in the bony landmark file local reference frame
-    # And the original geometry, imported from a file, in an unknow reference frame
-    # So we put the original in its local reference frame as well
-    
-    # Note that aling the original solution with T_local is not advisable, since the bony landmarks file can have
-    # a different referential frame from the original solution (because of the software for instance)
-    # Indeed, this is only possible because the original .stl and the bony landmarks .txt is in the same reference frame 
-    #TODO Solve this issue for the case where the above line is not valid
-    
     # Local alignment for original geometry
     pcd_new.transform(T)
     mesh.transform(T)
@@ -1450,12 +1428,10 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
                                            mesh.paint_uniform_color(red)])
         
         
-    ## In terms of pcd and mesh visualization of the forms, this is as far as we can get (in terms of alignment)
-    ## The rest of the code is to computed a distance metric between the two shapes, though not having influence on its shape
-    ## That is, what is missing is correpondence between shapes
+    ## In terms of pcd and mesh visualization, this is as far as we can get (in terms of alignment)
+    ## The rest of the code is to compute distance metrics between the two shapes.
     
     # Save reconstruction and original solution in pickle
-    
     # Open pickle
     with open(picklepath, "rb") as file:
         OptData = pickle.load(file)
@@ -1473,7 +1449,6 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
                        'Triangles' : copy.deepcopy(np.asarray(OptGeom['Mesh'].triangles))
                       }
         
-       
     # Save reconstruction and original solution in local referential frames.
     # Original solution
     OriGeom = {}
@@ -1493,17 +1468,18 @@ def CompareToSolution(stlpath: str, picklepath: str, OptGeom: dict, StatModel: d
     
     # Save the reconstruction with landmarks for visualization purposes
     if n_landmarks > 0:
-        # Cria uma esfera à volta de cada landmark apenas para visualização
+        # Creates a sphere at the landmarks for visualization purposes only
         PolyDataOpt = SphereLandmarks(OptGeom, PolyDataOpt, n_landmarks, landmarks_positions, plots)
         PolyDataOpt.save(picklepath.split('.pickle')[0] + '_local_aligned-with-sol_view' + '.stl')
     
     ## Correspondence
-        
     # To obtain a distance metric, we should correspond point-to-point the two geometries
-    # CPDCor is a shortcut to obtain a correspondence vector, but is not fool-proof (CQuental). 
-    # It has a lot of repeated point-to-point correspondences. That is why Frederico triples the number of the target points, although that method is not the best one as well
+    # CPDCor is a shortcut to obtain a correspondence vector, but is not fool-proof. 
+    # It has a repeated point-to-point correspondences. That is why the number of the target points is tripled, 
+    # although this method is not the best one as well.
     # cpdRes is the deformed source, which has better results than using CPDCor (CQuental)
-    # We use cpdRes, because that way we guarantee a direct correspondence and, thus, we can compute a distance metric, for the reconstruction
+    # We use cpdRes, because that way we guarantee a direct correspondence and, thus, we can compute 
+    # a distance metric, for the reconstruction.
     # The source must be OptGeom['Pcd'], so that the displacement can be used for heatmaps
     # But deformed source - source gives almost 0 error, which is not realistic.
     # Thus, Frederico's approach is considered, similarly to Validation.py in the SSM code

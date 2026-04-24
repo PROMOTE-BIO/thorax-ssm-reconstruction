@@ -47,7 +47,7 @@ def CustomCPD(source, target, instance, SSMSettings, Stiffness, landmarks_positi
     """
     
     # Finds correspondence using CPD
-    # compute cpd registration
+    # Compute cpd registration
     target_cp = copy.deepcopy(target)
     source_cp = copy.deepcopy(source)
     
