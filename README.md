@@ -126,3 +126,17 @@ If you use this work, please cite:
   journal={Under Review},\
   year={2026}\
 }
+
+## 🙏 Acknowledgments
+
+The authors express gratitude to the Free Access Decedent Database, funded by the National Institute of Justice (grant number 2016-DN-BX-0144), for providing the whole human body computed tomography (CT) scans that were instrumental in enabling this study.
+
+This repository also includes an implementation of the Bayesian Coherent Point Drift (BCPD) algorithm developed by Hirose:
+
+Hirose O (2023) *Geodesic-Based Bayesian Coherent Point Drift*. IEEE Transactions on Pattern Analysis and Machine Intelligence, 45(5):5816–5832. https://doi.org/10.1109/TPAMI.2022.3214191
+
+We acknowledge the original author for this contribution.
+
+## 💰 Funding
+
+The authors acknowledge Fundação para a Ciência e a Tecnologia (FCT) for its financial support via LAETA (project https://doi.org/10.54499/UID/50022/2025) and PROMOTE-BIO (project https://doi.org/10.54499/2023.17710.ICDT).
